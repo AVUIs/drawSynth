@@ -10,13 +10,19 @@
 
 draggableVertex::draggableVertex(float xPos, float yPos, float zPos){
 
+//    dragPoint.x = xPos;
+//    dragPoint.y = yPos;
+//    dragPoint.z = zPos;
+
+    
+
     x=xPos;
     y=yPos;
     z=zPos;
     
     bBeingDragged=false;
     bOver=false;
-    radius=4;
+    radius=8;
     
     
     

@@ -23,6 +23,11 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     
+    ofSetFrameRate(30);
+    
+    light.setAmbientColor(ofColor(255, 255, 255));
+    alpha = 255;
+    
     sender.setup(HOST, PORT);
     stage.set(0, 0, ofGetWidth(), ofGetHeight());
 
@@ -32,7 +37,8 @@ void ofApp::setup(){
     open=true;              // set the polygon true at the beginning
     running=true;
     ableClick=true;
-//    ofSetBackgroundAuto(false);
+    screenAuto = true;
+    ofSetBackgroundAuto(screenAuto);
     ofBackground(15);      //background white
     handlerRadius = 5;     // radius of the handler of the polygon
     
@@ -56,6 +62,7 @@ void ofApp::setup(){
             float hue = angle/TWO_PI*255;
             float sat = ofMap(dist,0,w/4,0,255,true);
             float bri = ofMap(dist,w/4,w/2,255,0,true);
+//            float alpha  = 
             
             img.setColor(x,y,ofColor::fromHsb(hue,sat,bri));
             
@@ -148,16 +155,19 @@ void ofApp::setup(){
  
 
     randomZ=0;
+    actualZ = 0;
 
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
     img.update();
+    ofSetBackgroundAuto(screenAuto);
+
     
     for (int i = 0; i < curveVertices.size(); i++){
 
-    
+
     xt +=(ofGetWidth()/2-xt)*0.01;
     yt +=(ofGetHeight()/2-yt)*0.01;
 
@@ -165,6 +175,8 @@ void ofApp::update(){
 //        yt = curveVertices[i].y;
     
     }
+    
+    
 
 }
 
@@ -233,43 +245,80 @@ void ofApp::keyPressed(int key){
     ///screen false/true
     
     if(key=='a'){
-        ofColor transpaColor(colorPicked.r,colorPicked.g,colorPicked.b,ofRandom(20,150));
+        ofColor transpaColor(colorPicked.r,colorPicked.g,colorPicked.b,ofRandom(20,50));
         selectedColor.clear();
         selectedColor.push_back(transpaColor);
         
-        ofSetBackgroundAuto(false);
+//        ofSetBackgroundAuto(false);
+        screenAuto = !screenAuto;
         
             }
     
     //easycam
     
     if(key=='z'){
-        camActive=true;
-        randomZ=ofRandom(-1000,1000);
-        
-    }else{
+//        camActive=true;
+//        randomZ=ofRandom(-1000,1000);
+     
+        camActive=!camActive;
+    }
+//        else{
+//
+//        camActive=false;
+//    }
+
     
-        camActive=false;
+    
+    /////transparency/////
+    if(key==OF_KEY_DOWN){
+        alpha-=10;
+        ofColor transpaColor(colorPicked.r,colorPicked.g,colorPicked.b, alpha);
+        selectedColor.clear();
+        selectedColor.push_back(transpaColor);
+       
+    }
+    
+    if(key==OF_KEY_UP){
+        alpha+=10;
+        ofColor transpaColor(colorPicked.r,colorPicked.g,colorPicked.b, alpha);
+        selectedColor.clear();
+        selectedColor.push_back(transpaColor);
+        
+    }
+
+    
+    
+    if(key=='r'){
+        selectedColor.clear();
+//        selectedColor[0].r=ofRandom(255);
+//        selectedColor[0].g=ofRandom(255);
+//        selectedColor[0].b=ofRandom(255);
+        
+        colorPicked.r=ofRandom(255);
+        colorPicked.g=ofRandom(255);
+        colorPicked.b=ofRandom(255);
+        alpha=ofRandom(255);
+        
+        ofColor transpaColor(colorPicked.r,colorPicked.g,colorPicked.b, alpha);
+
+        selectedColor.push_back(transpaColor);
+        
     }
 
     
     
     
-    
-//    ///close path with spacebar
-//    if(key==' '){
-//        if(ofFill){
-//            ofNoFill();
-//        }else{
-//            ofFill;
-//        }
-//    }
+    ///close path with spacebar
+    if(key==' '){
+        open=!open;
+        
+    }
     
     
     ///DELETE LAST POINT
     
     if(key=='b' && curveVertices.size()>0){
-        open=true;
+//        open=true;
         curveVertices.pop_back();
         myPoints.pop_back();
         ableClick=true;
@@ -332,6 +381,7 @@ void ofApp::keyPressed(int key){
                 
                 curveVertices[i].x=ofRandom(ofGetWidth());
                 curveVertices[i].y=ofRandom(ofGetHeight());
+                curveVertices[i].z=ofRandom(ofGetHeight());
             
             }
             
@@ -342,7 +392,7 @@ void ofApp::keyPressed(int key){
 
 //            ofSetBackgroundAuto(false);
             for (int i = 0; i < curveVertices.size(); i++){
-                ofPoint position(curveVertices[i].x,curveVertices[i].y);
+                ofPoint position(curveVertices[i].x,curveVertices[i].y,curveVertices[i].z);
                 ofPoint centre(ofGetWidth()/2,ofGetHeight()/2);
                 
                 float dist = ofDist(position.x,position.y , centre.x,centre.y);
@@ -354,10 +404,11 @@ void ofApp::keyPressed(int key){
    
                     directionX=ofMap(mouseX, 0, ofGetWidth(), -100, 100);
                     directionY=ofMap(mouseY, 0, ofGetHeight(), -100, 100);
-
+                    curveVertices[i].z= ofMap(mouseX, 0, ofGetWidth(), -1000, 1000);
                     
                     curveVertices[i].x+=ofRandom(directionX);
                     curveVertices[i].y+=ofRandom(directionY);
+                    curveVertices[i].z+=ofRandom(directionY);
                    
             }
         
@@ -366,6 +417,7 @@ void ofApp::keyPressed(int key){
             curveVertices[i].y=ofGetHeight() -  curveVertices[i].y;
             curveVertices[i].x+=ofRandom(directionX);
             curveVertices[i].y+=ofRandom(directionY);
+            curveVertices[i].z+= ofRandom(directionX);
             
             
 
@@ -386,16 +438,21 @@ void ofApp::keyPressed(int key){
 void ofApp::keyReleased(int key){
 
     if (key=='z') {
-        myCam.end();
-        camActive=false;
-        randomZ=0;
-    }
+        
+
+        }
+//        camActive=false;
+//        actualZ=0;
+        
+        
+        
     
-    if(key=='a'){
-        
-        ofSetBackgroundAuto(true);
-        
-    }
+    
+//    if(key=='a'){
+//        
+//        ofSetBackgroundAuto(true);
+//        
+//    }
     
 
 }
@@ -480,10 +537,23 @@ void ofApp::mousePressed(int x, int y, int button){
             printf("V %lu \n",myPoints.size() );
             printf("curvevertices %lu \n",curveVertices.size() );
             
-            draggableVertex newDraggableVertex(x,y,randomZ);
+            
+            if (camActive) {
+                actualZ = myCam.getZ();
+                
+                loc = myCam.screenToWorld( ofVec3f( x, y, actualZ ) );
+
+                
+            }else{
+                actualZ = 0;
+            
+            }
+            
+            
+            draggableVertex newDraggableVertex(x,y,loc.z);
             curveVertices.push_back(newDraggableVertex);
             
-            ofPoint newPoint(x,y,0);
+            ofPoint newPoint(x,y,actualZ);
             myPoints.push_back(newPoint);
             
             
@@ -595,13 +665,62 @@ void ofApp::colorPicker(){
 
 void ofApp::polygons(){
     
+    //  light.
+    ofPushStyle();
+    light.enable();
+    light.setPosition(myCam.getZAxis());
+    
+    
+    ////screen refresh///
+//    if (screenAuto==false) {
+//        
+//        for (int i; i<ofGetFrameNum()%200; i++) {
+//            
+//            ofPushStyle();
+//            ofSetRectMode(OF_RECTMODE_CORNER);
+//            ofSetColor(0, 0, 0,2);
+//            ofRect(0, 0, ofGetWidth(), ofGetHeight());
+//            ofPopStyle();
+//        }
+//        
+//    }
+//
+
+    ///////////
+
+//    
+//    if (!open) {
+//
+//        ofSetColor(selectedColor[0]);
+//        ofFill();
+//    }
+//    
+//    ///////
+   
+    
+    
+    
     if (camActive) {
+   
         myCam.begin();
+        
+//        //  light.
+//        ofPushStyle();
+//        light.enable();
+//        light.setPosition(myCam.getZAxis());
 
         ofPushMatrix();
         ofTranslate(-ofGetWidth()/2, -ofGetHeight()/2);
 
 
+    } else {
+        for (int i=0; i<curveVertices.size(); i++) {
+            curveVertices[i].z=0;
+        }
+            myCam.end();
+            
+        
+    
     }
 
   
@@ -622,14 +741,18 @@ void ofApp::polygons(){
                 ofBeginShape();
                 //shape
                 for (int i = 0; i < curveVertices.size(); i++){
-                    ofVertex(curveVertices[i].x, curveVertices[i].y);
+                    ofVertex(curveVertices[i].x, curveVertices[i].y,curveVertices[i].z);
                 }
                 ofEndShape(false);
                 //handle circle
                 for (int i = 0; i < curveVertices.size(); i++){
+                    ofFill();
+                    
+                    
+                    ofCircle(curveVertices[0].x, curveVertices[0].y,curveVertices[0].z,8);
                     if (curveVertices[i].bOver == true) ofFill();
                     else ofNoFill();
-                    ofCircle(curveVertices[i].x, curveVertices[i].y,4);
+                    ofCircle(curveVertices[i].x, curveVertices[i].y,curveVertices[i].z,8);
                 }
             }
             
@@ -641,8 +764,8 @@ void ofApp::polygons(){
                 && curveVertices[0].x - mouseX<=handlerRadius*5
                 && curveVertices[0].y - mouseY<=handlerRadius*5
                 ) {
-                ofSetColor(0);
-                string mouseMessage;
+//                ofSetColor(0);
+//                string mouseMessage;
                 
                 //CLOSE MESSAGE
 //                mouseMessage = "close the pattern";
@@ -664,7 +787,7 @@ void ofApp::polygons(){
                 }
 //
     }
-        if (distance>0 && distance<=handlerRadius*2) {
+        if ((distance>0 && distance<=handlerRadius*2) || !open) {
     
 //        ofSetColor(selectedColor[0]);
 //        ofDrawBitmapString("Press C to make " + curvedVal + " shape", 30,ofGetHeight()/2);
@@ -673,7 +796,7 @@ void ofApp::polygons(){
             for (int i = 0; i < curveVertices.size(); i++){
                 if (curveVertices[i].bOver == true) ofFill();
                 else ofNoFill();
-                ofCircle(curveVertices[i].x, curveVertices[i].y,5);
+                ofCircle(curveVertices[i].x, curveVertices[i].y,curveVertices[i].z,8);
             }
 
         ////////THIS IS THE OLD BEGIN SHAPE
@@ -688,14 +811,14 @@ void ofApp::polygons(){
             if (curved) {
                 
                 if (i == 0){
-                    ofCurveVertex(curveVertices[0].x, curveVertices[0].y); // we need to duplicate 0 for the curve to start at point 0
-                    ofCurveVertex(curveVertices[0].x, curveVertices[0].y); // we need to duplicate 0 for the curve to start at point 0
+                    ofCurveVertex(curveVertices[0].x, curveVertices[0].y,curveVertices[i].z); // we need to duplicate 0 for the curve to start at point 0
+                    ofCurveVertex(curveVertices[0].x, curveVertices[0].y,curveVertices[i].z); // we need to duplicate 0 for the curve to start at point 0
                 } else if (i == curveVertices.size()-1){
-                    ofCurveVertex(curveVertices[i].x, curveVertices[i].y);
-                    ofCurveVertex(curveVertices[0].x, curveVertices[0].y);	// to draw a curve from pt 6 to pt 0
-                    ofCurveVertex(curveVertices[0].x, curveVertices[0].y);	// we duplicate the first point twice
+                    ofCurveVertex(curveVertices[i].x, curveVertices[i].y,curveVertices[i].z);
+                    ofCurveVertex(curveVertices[0].x, curveVertices[0].y,curveVertices[i].z);	// to draw a curve from pt 6 to pt 0
+                    ofCurveVertex(curveVertices[0].x, curveVertices[0].y,curveVertices[i].z);	// we duplicate the first point twice
                 } else {
-                    ofCurveVertex(curveVertices[i].x, curveVertices[i].y);
+                    ofCurveVertex(curveVertices[i].x, curveVertices[i].y,curveVertices[i].z);
                 }
                 
 
@@ -703,7 +826,7 @@ void ofApp::polygons(){
             }else{
                 
             //straight shape
-            ofVertex(curveVertices[i].x,curveVertices[i].y);
+            ofVertex(curveVertices[i].x,curveVertices[i].y,curveVertices[i].z);
             curved=false;
             }
 
@@ -720,7 +843,13 @@ void ofApp::polygons(){
 
                 ofPopMatrix();
                 
+                light.disable();
+                ofDisableLighting();
+                
                 myCam.end();
+                
+                
+           
 
 
             }
@@ -829,41 +958,48 @@ void ofApp::audioRequested 	(float * output, int bufferSize, int nChannels){
 //        wave=sine1.sinebuf(abs(mouseX));/* mouse controls sinewave pitch. we get abs value to stop it dropping
                                          //										 delow zero and killing the soundcard*/
         
-        
+//        *output=mySine.sinewave(myOtherSine.sinewave(myLastSine.sinewave(0.1)*30)*440);//awesome bassline
+
         
         wave=0;
         wave2=0;
         for(int i=0; i < curveVertices.size(); i++) {
-            double f0 = curveVertices[i].x;
-            double f1 = curveVertices[i].y;
-            double f2 = curveVertices[i].z;
-            double rgb = colorPicked.b*colorPicked.r*colorPicked.g;
-            double sound2 = ofMap(rgb,0,(powf(255,3)),20,600);
-//            double thisSine = wave + sineBank[i].sinewave(f0 + (i * f1))*sin(i)+ sineBank[i-1].square(f1);
-            double thisSine = (sineBank[i-1].sinewave(sound2)*sin(i*f2))*(sineBank[i].sinewave(f1)*cos(i));
+            double f0 = abs(curveVertices[i].x);
+            double f1 = abs(curveVertices[i].y);
+            double f2 = abs(curveVertices[i].z);
             
-            if (camActive) {
-                double thisSine2 = (sineBank[i-1].triangle(f2)*sin(i)*sin(colorPicked.b))*(sineBank[i].sinewave(colorPicked.r)*sin(colorPicked.g));
-                wave2 = wave2 + thisSine2;
-            } else {
+            
+            double rgb = (colorPicked.b*colorPicked.r*colorPicked.g);
+            double sound2 = ofMap(rgb,0,(powf(255,3)),1,80);
+            
+            
+            
+            if (camActive ) {
+                wave2 = sineBank[i].sinewave(sineBank[i-1].sinewave(sineBank[i-2].sinewave(0.1)*sound2)*f2*sin(f0));
+            } else if (camActive==false && curved == false){
 
-            double thisSine2 = (sineBank[i-1].sawn(f2)*sin(i)*sin(colorPicked.b))*(sineBank[i].sinewave(colorPicked.r)*sin(colorPicked.g));
-                wave2 = wave2 + thisSine2;
+
+                wave2 = sineBank[i-1].sinewave(sineBank[i].sinewave(sineBank[i-2].sinewave(0.1)*sound2)*f1);
+            
+            } else if (curved && camActive==false) {
+
+                wave2 = sineBank[i-1].sinewave(sineBank[i-2].sinewave(sineBank[i-1].sinewave(0.1)*sound2)*f0);
+            } else {
+            
+            
+            
             
             }
 
-//            double multiplier = 1.0 / (i+1.0);
-//            double multiplier = 1.0 / (i);
 
-//            thisSine = (thisSine)*multiplier;
-            wave = wave + thisSine;
             
             
-            //            f0+=sin(multiplier)*i*10;
         }
         if (curveVertices.size()>0){
-            wave *=ofNormalize((curveVertices.size()),.1,.5);
-            wave2 *=ofNormalize((curveVertices.size()),.1,.5);
+//            wave *=ofNormalize((curveVertices.size()),.1,.5);
+//            wave2 *=ofNormalize((curveVertices.size()),.1,.5);
+
+            wave2 *=ofMap(curveVertices.size(), 0, 100, .5, .5);
 
 //            ofNormalize(wave, 0, .1);
 

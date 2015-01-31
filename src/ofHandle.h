@@ -35,6 +35,7 @@ public:
     bool 	bBeingDragged;
     bool 	bOver;
     float 	radius;
+    ofVec3f dragPoint;
 
 };
 

@@ -37,17 +37,20 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
     
+        void updateMouseRay();
+
         vector <ofPoint> myPoints;
         ofPoint mousePos;
         ofColor colorPicked;
         ofRectangle colorPickerRect;
         ofRectangle stage;
+        ofVec3f loc;
     
 
         float butRadius;
         float butAlpha;
-        float randomZ;
-
+        float randomZ, actualZ;
+        int alpha;
     
         bool open, ableClick,bFullscreen,running, curved;
         float distance, xt,yt;
@@ -61,6 +64,8 @@ class ofApp : public ofBaseApp{
     
         ofFbo pickerFbo;
         ofFbo polyFbo;
+    
+        ofLight light;
     
     ///////MAIN FUNCTIONS////////
         void colorPicker();
@@ -99,12 +104,42 @@ class ofApp : public ofBaseApp{
     
     maxiOsc sineBank[100];//let's create an oscillator and give it a name.
     maxiOsc myCounter,mySquare;//these oscillators will help us count and play sound
-    int CurrentCount;//we're going to put the current count in this variable so that we can use it more easily.
+//    int CurrentCount;//we're going to put the current count in this variable so that we can use it more easily.
 
 
     
     ofEasyCam myCam;
     bool camActive;
+    bool screenAuto;
+    
+    
+    
+    
+    
+    ///////////polysynth
+    
+    //This shows how to use maximilian to build a polyphonic synth.
+    
+    //These are the synthesiser bits
+    maxiOsc VCO1[6],VCO2[6],LFO1[6],LFO2[6];
+    maxiFilter VCF[6];
+    maxiEnvelope ADSR[6];
+    
+    //These are the control values for the envelope
+    
+    double adsrEnv[8]={1,5,0.125,100,0.125,200,0,1000};
+    
+    //This is a bunch of control signals so that we can hear something
+    
+    maxiOsc timer;//this is the metronome
+    int currentCount,lastCount,voice=0;//these values are used to check if we have a new beat this sample
+    
+    //and these are some variables we can use to pass stuff around
+    
+    double VCO1out[6],VCO2out[6],LFO1out[6],LFO2out[6],VCFout[6],ADSRout[6],mix,pitch[6];
+    
+    
+    
     
     
 };
