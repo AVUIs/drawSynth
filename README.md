@@ -1,5 +1,7 @@
 # drawSynth
+# Anto+Creo
 drawPolygons + synth
+
 
 This is a prototype for an audiovisual interface.
 It is based on drawpolygons and it uses Maximilian addon https://github.com/micknoise/Maximilian to generate sounds.
@@ -47,6 +49,9 @@ Drawing in 3d while using Easycam is basically impossible at the moment.
 I am not yet able to remap the 3d position of the mouse.
 The click to draw new dots is activated anyway while in 3d mode but it is not very usable. Use your imagination!:)
 
+CONTACTS
+feel free to add, remove, edit, improve, destroy, munch, scratch the code as much as you like it.
+Please let me know if you need help, or if you find solutions to the bugs or any eventual improvement.
 
 
 
