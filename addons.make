@@ -1,4 +1,3 @@
 ofxOsc
 ofxXmlSettings
-ofxAubio
 ofxMaxim
