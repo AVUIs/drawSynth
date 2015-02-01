@@ -31,7 +31,9 @@ Some people had problem installing MAximilian addon.
 Best way I think is creating a new project with project generator and adding the following addons.
 
 ofxOsc
+
 ofxXmlSettings
+
 ofxMaxim
 
 The program is set up so to send OSC messages and it can be easily customised for that.
