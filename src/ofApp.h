@@ -10,6 +10,8 @@
 #include "ofxXmlSettings.h"
 #include "ofHandle.h"
 #include "ofxMaxim.h"
+#include "ofxTuioClient.h"
+//#include "ofxTuioServer.h"
 
 
 
@@ -70,9 +72,12 @@ class ofApp : public ofBaseApp{
     ///////MAIN FUNCTIONS////////
         void colorPicker();
         void polygons();
-     
-    
         void saveXml();
+    
+    void touchDown(ofTouchEventArgs & touch);
+    void touchUp(ofTouchEventArgs & touch);
+    void touchMoved(ofTouchEventArgs & touch);
+
     
     //////////// draggable vertices ////////
     
@@ -85,6 +90,13 @@ class ofApp : public ofBaseApp{
     
     
     ofxOscSender sender;
+    ofxOscReceiver receiver;
+    
+    ofxTuioClient myTuioClient;
+    
+    ofEasyCam myCam;
+    bool camActive;
+    bool screenAuto;
     
     ////////////maximilian
     
@@ -94,49 +106,26 @@ class ofApp : public ofBaseApp{
     int		initialBufferSize; /* buffer size */
     int		sampleRate;
     
-    
-    /* stick you maximilian stuff below */
-    
-    double wave, wave2,sample,outputs[2];
-    ofxMaxiMix mymix;
-    ofxMaxiOsc sine1;
-    ofxMaxiSample beats,beat;
-    
-    maxiOsc sineBank[100];//let's create an oscillator and give it a name.
-    maxiOsc myCounter,mySquare;//these oscillators will help us count and play sound
-//    int CurrentCount;//we're going to put the current count in this variable so that we can use it more easily.
-
 
     
-    ofEasyCam myCam;
-    bool camActive;
-    bool screenAuto;
+    
+    double f0,f1,f2,rgb,sound2,sound3;
+    
+   
+    
+    //////////FM//////////
+    
+    maxiOsc mySine[10],myOtherSine[10],myLastSine[10],myPhasor[10];//Three oscillators
+
+    maxiOsc sineBank[10];//let's create an oscillator and give it a name.
+
+    double myBass;
+    maxiFlanger myFlanger;
+    
+    ////////////////////////////
     
     
     
-    
-    
-    ///////////polysynth
-    
-    //This shows how to use maximilian to build a polyphonic synth.
-    
-    //These are the synthesiser bits
-    maxiOsc VCO1[6],VCO2[6],LFO1[6],LFO2[6];
-    maxiFilter VCF[6];
-    maxiEnvelope ADSR[6];
-    
-    //These are the control values for the envelope
-    
-    double adsrEnv[8]={1,5,0.125,100,0.125,200,0,1000};
-    
-    //This is a bunch of control signals so that we can hear something
-    
-    maxiOsc timer;//this is the metronome
-    int currentCount,lastCount,voice=0;//these values are used to check if we have a new beat this sample
-    
-    //and these are some variables we can use to pass stuff around
-    
-    double VCO1out[6],VCO2out[6],LFO1out[6],LFO2out[6],VCFout[6],ADSRout[6],mix,pitch[6];
     
     
     

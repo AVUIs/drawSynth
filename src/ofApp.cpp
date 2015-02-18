@@ -7,18 +7,6 @@
 #include "ofApp.h"
 
 
-////-------------------------------------------------------------
-//ofApp::~ofApp() {
-//    
-//    delete beat.myData; /*you should probably delete myData for any sample object
-//                         that you've created in ofApp.h*/
-//    
-//}
-
-
-
-
-
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -30,6 +18,19 @@ void ofApp::setup(){
     
     sender.setup(HOST, PORT);
     stage.set(0, 0, ofGetWidth(), ofGetHeight());
+    receiver.setup(12345);
+    
+    
+    //Connect to Port
+    myTuioClient.connect(3333);
+    
+    
+    //Assign Global TUIO Callback Functions
+    ofAddListener(ofEvents.touchDown,this,&ofApp::touchDown);
+    ofAddListener(ofEvents.touchUp,this,&ofApp::touchUp);
+    ofAddListener(ofEvents.touchMoved,this,&ofApp::touchMoved);
+    
+    
 
     
     ofSetFullscreen(true);  // set fullscreen
@@ -146,10 +147,7 @@ void ofApp::setup(){
     
     /* Now you can put anything you would normally put in maximilian's 'setup' method in here. */
     
-    
-    beat.load(ofToDataPath("beat2.wav"));
-    beat.getLength();
-    
+
     
     ofSoundStreamSetup(2,0,this, sampleRate, initialBufferSize, 4);/* Call this last ! */
  
@@ -176,13 +174,17 @@ void ofApp::update(){
     
     }
     
-    
+
 
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
     
+    
+    //render TUIO Cursors and Objects
+    myTuio.drawCursors();
+    myTuio.drawObjects();
 
     if (selectedColor.size()==0) {
         
@@ -200,24 +202,7 @@ void ofApp::draw(){
             
             
         }
-        
-        
-        
-        
-        ///////////maximilian///////
-        
-        
-        /* You can use any of the data from audio received and audiorequested to draw stuff here.
-         Importantly, most people just use the input and output arrays defined above.
-         Clever people don't do this. This bit of code shows that by default, each signal is going to flip
-         between -1 and 1. You need to account for this somehow. Get the absolute value for example.
-         */
-        
-//        ofSetColor(255, 255, 255,255);
-//        ofRect(600, 300, sample*150, sample*150); /* audio sigs go between -1 and 1. See?*/
-//        ofCircle(200, 300, wave*150);
-        
-
+      
 
     }
     
@@ -942,84 +927,108 @@ void ofApp::audioRequested 	(float * output, int bufferSize, int nChannels){
     
     for (int i = 0; i < bufferSize; i++){
         
-        /* Stick your maximilian 'play()' code in here ! Declare your objects in ofApp.h.
-         
-         For information on how maximilian works, take a look at the example code at
-         
-         http://www.maximilian.strangeloop.co.uk
-         
-         under 'Tutorials'.
-         
-         */
         
-        
-        
-//        sample=beat.play(0.25, 0, beat.length);
-//        wave=sine1.sinebuf(abs(mouseX));/* mouse controls sinewave pitch. we get abs value to stop it dropping
-                                         //										 delow zero and killing the soundcard*/
-        
-//        *output=mySine.sinewave(myOtherSine.sinewave(myLastSine.sinewave(0.1)*30)*440);//awesome bassline
-
-        
-        wave=0;
-        wave2=0;
         for(int i=0; i < curveVertices.size(); i++) {
-            double f0 = abs(curveVertices[i].x);
-            double f1 = abs(curveVertices[i].y);
-            double f2 = abs(curveVertices[i].z);
+            //            double f0 = abs(curveVertices[i].x);
+            //            double f1 = abs(curveVertices[i].y);
+            //            double f2 = abs(curveVertices[i].z);
             
+             f0 = (curveVertices[i].x);
+             f1 = (curveVertices[i].y);
+             f2 = (curveVertices[i].z);
             
-            double rgb = (colorPicked.b*colorPicked.r*colorPicked.g);
-            double sound2 = ofMap(rgb,0,(powf(255,3)),1,80);
+             rgb = (colorPicked.b*colorPicked.r*colorPicked.g);
+             sound2 = ofMap(rgb,0,(powf(255,3)),1,curveVertices.size());
+             sound3 = ofMap(rgb,0,(powf(255,3)),1,10);
             
-            
-            
+//        }
+        
             if (camActive ) {
-                wave2 = sineBank[i].sinewave(sineBank[i-1].sinewave(sineBank[i-2].sinewave(0.1)*sound2)*f2*sin(f0));
-            } else if (camActive==false && curved == false){
+             
+//                myBass=0;
+
+            myBass = mySine[i].sinewave(abs((myOtherSine[i].triangle(myLastSine[i].phasor(0.1)*f2)*f2*sound2)));//awesome bassline
 
 
-                wave2 = sineBank[i-1].sinewave(sineBank[i].sinewave(sineBank[i-2].sinewave(0.1)*sound2)*f1);
+                
+            }
             
-            } else if (curved && camActive==false) {
+            if (camActive==false && curved == false){
+//                myBass=0;
 
-                wave2 = sineBank[i-1].sinewave(sineBank[i-2].sinewave(sineBank[i-1].sinewave(0.1)*sound2)*f0);
-            } else {
+                
+                myBass = mySine[i].sinewave(myOtherSine[i].sinewave(myLastSine[i-1].sinewave(0.1)*sound2)*f1);//awesome bassline
+
+                
+            }
+            
+            if (curved && camActive==false) {
+//                myBass=0;
+
+                
+                myBass = mySine[i].sinewave(myOtherSine[i].triangle(myLastSine[i].sinewave(0.1)*sound2)*f0);//awesome bassline
+
+                
+            }
+            
+            if (curved && camActive){
+//                myBass=0;
+
+                
+                myBass = mySine[i].sinewave(myOtherSine[i].sinewave(myLastSine[i].sinewave(0.1)*sound2)*f1);//awesome bassline
+
+                
+            }
+            
+            if (!screenAuto){
             
             
+//                myBass=0;
+//                double f0 = 100;
+                for(int i=0; i < 10; i++) {
+                    double thisSine = myBass + sineBank[i].sinewave(f0 + (i * f1));
+                    double multiplier = 1.0 / (i+1.0);
+                    thisSine = thisSine * multiplier;
+                    myBass = myBass + thisSine;
+                }
+                myBass *= 0.1;
+//                *output = wave;//simple as that!
+                
+            }
             
             
+            if (!open && !camActive){
+                
+                
+//                myBass=0;
+                //                double f0 = 100;
+                for(int i=0; i < 10; i++) {
+                    double thisSine = myBass + sineBank[i].sinewave(sineBank[i].square(f1 + (i * f0))*sound3);
+                    double multiplier = 1.0 / (i+1.0);
+                    thisSine = thisSine * multiplier;
+                    myBass = myBass + thisSine;
+                }
+                myBass *= 0.1;
+                //                *output = wave;//simple as that!
+                
             }
 
-
+            
+            
             
             
         }
-        if (curveVertices.size()>0){
-//            wave *=ofNormalize((curveVertices.size()),.1,.5);
-//            wave2 *=ofNormalize((curveVertices.size()),.1,.5);
-
-            wave2 *=ofMap(curveVertices.size(), 0, 100, .5, .5);
-
-//            ofNormalize(wave, 0, .1);
-
+        
+        
+        
+//        *output=mySine.sinewave(myOtherSine.sinewave(myLastSine.sinewave(0.1)*30)*440);//awesome bassline
+//        myBass = mySine.sinewave(myOtherSine.sinewave(myLastSine.sinewave(0.1)*30)*440);//awesome bassline
+        
+        output[i*nChannels] = myBass;
+        output[i*nChannels +1] = myBass;
+        
         }
-
-        *output = wave;//simple as that!
-        *output = wave2;
-
-        
-
-        
-       
-
-        
-        mymix.stereo(sample + wave + wave2, outputs, 0.5);
-
-        
-        output[i*nChannels    ] = outputs[0]; /* You may end up with lots of outputs. add them here */
-        output[i*nChannels + 1] = outputs[1];
-    }
+    
     
 }
 
