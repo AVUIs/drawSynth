@@ -97,21 +97,23 @@ class ofApp : public ofBaseApp{
     int		initialBufferSize; /* buffer size */
     int		sampleRate;
     
-
+    
     
     
     double f0,f1,f2,rgb,sound2,sound3;
     
-   
+    
     
     //////////FM//////////
     
-    maxiOsc mySine,myOtherSine,myLastSine,myPhasor;//Three oscillators
-
+    maxiOsc mySine[10],myOtherSine[10],myLastSine[10],myPhasor[10];//Three oscillators
+    
+    maxiOsc sineBank[10];//let's create an oscillator and give it a name.
+    
     double myBass;
+    maxiFlanger myFlanger;
     
     ////////////////////////////
-    
     
     
     

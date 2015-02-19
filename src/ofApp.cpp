@@ -20,7 +20,7 @@ void ofApp::setup(){
     stage.set(0, 0, ofGetWidth(), ofGetHeight());
 
     
-    ofSetFullscreen(true);  // set fullscreen
+//    ofSetFullscreen(true);  // set fullscreen
     
     open=true;              // set the polygon true at the beginning
     running=true;
@@ -916,54 +916,101 @@ void ofApp::audioRequested 	(float * output, int bufferSize, int nChannels){
             //            double f1 = abs(curveVertices[i].y);
             //            double f2 = abs(curveVertices[i].z);
             
-             f0 = (curveVertices[i].x);
-             f1 = (curveVertices[i].y);
-             f2 = (curveVertices[i].z);
+            f0 = (curveVertices[i].x);
+            f1 = (curveVertices[i].y);
+            f2 = (curveVertices[i].z);
             
-             rgb = (colorPicked.b*colorPicked.r*colorPicked.g);
-             sound2 = ofMap(rgb,0,(powf(255,3)),1,curveVertices.size());
-             sound3 = ofMap(rgb,0,(powf(255,3)),.1,1);
+            rgb = (colorPicked.b*colorPicked.r*colorPicked.g);
+            sound2 = ofMap(rgb,0,(powf(255,3)),1,curveVertices.size());
+            sound3 = ofMap(rgb,0,(powf(255,3)),1,10);
+            
+            //        }
+            
+            if (camActive ) {
+                
+                //                myBass=0;
+                
+                myBass = mySine[i].sinewave(abs((myOtherSine[i].triangle(myLastSine[i].phasor(0.1)*f2)*f2*sound2)));//awesome bassline
+                
+                
+                
+            }
+            
+            if (camActive==false && curved == false){
+                //                myBass=0;
+                
+                
+                myBass = mySine[i].sinewave(myOtherSine[i].sinewave(myLastSine[i-1].sinewave(0.1)*sound2)*f1);//awesome bassline
+                
+                
+            }
+            
+            if (curved && camActive==false) {
+                //                myBass=0;
+                
+                
+                myBass = mySine[i].sinewave(myOtherSine[i].triangle(myLastSine[i].sinewave(0.1)*sound2)*f0);//awesome bassline
+                
+                
+            }
+            
+            if (curved && camActive){
+                //                myBass=0;
+                
+                
+                myBass = mySine[i].sinewave(myOtherSine[i].sinewave(myLastSine[i].sinewave(0.1)*sound2)*f1);//awesome bassline
+                
+                
+            }
+            
+            if (!screenAuto){
+                
+                
+                //                myBass=0;
+                //                double f0 = 100;
+                for(int i=0; i < 10; i++) {
+                    double thisSine = myBass + sineBank[i].sinewave(f0 + (i * f1));
+                    double multiplier = 1.0 / (i+1.0);
+                    thisSine = thisSine * multiplier;
+                    myBass = myBass + thisSine;
+                }
+                myBass *= 0.1;
+                //                *output = wave;//simple as that!
+                
+            }
+            
+            
+            if (!open && !camActive){
+                
+                
+                //                myBass=0;
+                //                double f0 = 100;
+                for(int i=0; i < 10; i++) {
+                    double thisSine = myBass + sineBank[i].sinewave(sineBank[i].square(f1 + (i * f0))*sound3);
+                    double multiplier = 1.0 / (i+1.0);
+                    thisSine = thisSine * multiplier;
+                    myBass = myBass + thisSine;
+                }
+                myBass *= 0.1;
+                //                *output = wave;//simple as that!
+                
+            }
+            
+            
+            
+            
             
         }
         
-            if (camActive ) {
-             
-                myBass = mySine.sinewave(myOtherSine.square(myLastSine.sinewave(0.1)*30)*f2*sound3);//awesome bassline
-
-                
-            } else if (camActive==false && curved == false){
-                
-                myBass = mySine.sinewave(myOtherSine.sinewave(myLastSine.sinewave(0.1)*30)*f1);//awesome bassline
-
-                
-            } else if (curved && camActive==false) {
-                
-                myBass = mySine.sinewave(myOtherSine.sinewave(myLastSine.sinewave(0.1)*30)*f0);//awesome bassline
-
-                
-            } else if (curved && camActive){
-                
-                myBass = mySine.sinewave(myOtherSine.sinewave(myLastSine.sinewave(0.1)*30)*440);//awesome bassline
-
-                
-            }
-            
-            else if (!open ){
-                
-                myBass = mySine.sinewave(myOtherSine.sinewave(myLastSine.sinewave(0.1)*f0-f1)*f0);//awesome bassline
-                
-                
-            }
         
         
-        
-//        *output=mySine.sinewave(myOtherSine.sinewave(myLastSine.sinewave(0.1)*30)*440);//awesome bassline
-//        myBass = mySine.sinewave(myOtherSine.sinewave(myLastSine.sinewave(0.1)*30)*440);//awesome bassline
+        //        *output=mySine.sinewave(myOtherSine.sinewave(myLastSine.sinewave(0.1)*30)*440);//awesome bassline
+        //        myBass = mySine.sinewave(myOtherSine.sinewave(myLastSine.sinewave(0.1)*30)*440);//awesome bassline
         
         output[i*nChannels] = myBass;
         output[i*nChannels +1] = myBass;
         
-        }
+    }
     
     
 }

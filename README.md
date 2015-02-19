@@ -17,13 +17,21 @@ each parameter you change will affect the sound.
 KEYBOARD COMMAND AND OPTIONS (all smallcaps)
 
 SPACEBAR - fills the shape with the selected color
+
 c - makes the closed shape curved
+
 k - random pattern
+
 r - random color
+
 z - toggle easycam (standard commands for easycam)
+
 a - toggle ofSetBackgroundAuto (to create trails etc...)
+
 b - delete last dot
+
 BACKSPACE - delete the whole shape
+
 f - toggle fullscreen
 
 INSTALLATION
@@ -45,6 +53,7 @@ The program is a very simple prototype mostly made to improve my skills in OF.
 There are massive margin of improvements and there are many bugs but so far it can be used for some fun.
 
 BUGS
+There is currently a bug, the cursor may not appear initially. If that happens, please try to move the cursor out of the application window, and it will reappear permanently then. This bug should be solved in the next version.
 the color picker at the right bottom corner works well just the first time. When you select a new color it seems that
 the whole colour overlays the picker itself. I couldn't find a solution. I tried using a Fbo but with no results.
 Drawing in 3d while using Easycam is basically impossible at the moment.
