@@ -7,10 +7,10 @@ This is a prototype for an audiovisual interface.
 It is based on drawpolygons and it uses Maximilian addon https://github.com/micknoise/Maximilian to generate sounds.
 
 #### HOW to USE IT
-step 1 - either select a color from the color panel at the bottom right corner or just start clicking on the stage. (default color will be white);
-step 2 - the more dots you create the more you modify the sound.
-step 3 - start drawing shapes and modify the sound by dragging the dots on the screen
-step 4 - just play with it.  Combination of keybord commands can create nice effects.
+* step 1 - either select a color from the color panel at the bottom right corner or just start clicking on the stage. (default color will be white);
+* step 2 - the more dots you create the more you modify the sound.
+* step 3 - start drawing shapes and modify the sound by dragging the dots on the screen
+* step 4 - just play with it.  Combination of keybord commands can create nice effects.
 
 each parameter you change will affect the sound.
 
