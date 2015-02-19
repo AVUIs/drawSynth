@@ -10,8 +10,6 @@
 		0546D1A38E13BD319CC9755B /* OscReceivedElements.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9BF3AA0D4FAA89D0F8A0E545 /* OscReceivedElements.cpp */; };
 		083FB2094A4DE99F5A60397A /* maxiMFCC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 440B2B891BD019685EF360B8 /* maxiMFCC.cpp */; };
 		0E7F56311A6DC0F3009E9FD7 /* ofHandle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0E7F562F1A6DC0F3009E9FD7 /* ofHandle.cpp */; };
-		0E91D0AC1A88AE70003A66FE /* ofxTuioClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0E91D0A81A88AE70003A66FE /* ofxTuioClient.cpp */; };
-		0E91D0AD1A88AE70003A66FE /* ofxTuioServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0E91D0AA1A88AE70003A66FE /* ofxTuioServer.cpp */; };
 		0FCED26D40D46CF89A58E54C /* fft.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F3C78E7AB53E01022E9374A3 /* fft.cpp */; };
 		22F21CE3B902225374BA1CA2 /* maximilian.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 87D3A0051CCB2C0F0ECA139E /* maximilian.cpp */; };
 		28090DEB5109115003E8F1C5 /* UdpSocketWin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5928AA323F5C2690B06C837D /* UdpSocketWin.cpp */; };
@@ -94,10 +92,6 @@
 		0AED834CE4DEC5260AF302A2 /* ofxOscParameterSync.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxOscParameterSync.cpp; path = ../../../addons/ofxOsc/src/ofxOscParameterSync.cpp; sourceTree = SOURCE_ROOT; };
 		0E7F562F1A6DC0F3009E9FD7 /* ofHandle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofHandle.cpp; sourceTree = "<group>"; };
 		0E7F56301A6DC0F3009E9FD7 /* ofHandle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofHandle.h; sourceTree = "<group>"; };
-		0E91D0A81A88AE70003A66FE /* ofxTuioClient.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxTuioClient.cpp; sourceTree = "<group>"; };
-		0E91D0A91A88AE70003A66FE /* ofxTuioClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxTuioClient.h; sourceTree = "<group>"; };
-		0E91D0AA1A88AE70003A66FE /* ofxTuioServer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxTuioServer.cpp; sourceTree = "<group>"; };
-		0E91D0AB1A88AE70003A66FE /* ofxTuioServer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxTuioServer.h; sourceTree = "<group>"; };
 		1EFA3ACBB8D16CC0DA1E79C6 /* maxiAtoms.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = maxiAtoms.cpp; path = ../../../addons/ofxMaxim/libs/maxiAtoms.cpp; sourceTree = SOURCE_ROOT; };
 		20F35AFADAF0068B067E713F /* OscReceivedElements.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = OscReceivedElements.h; path = ../../../addons/ofxOsc/libs/oscpack/src/osc/OscReceivedElements.h; sourceTree = SOURCE_ROOT; };
 		23640F57DF6C4BB6BFC5DA4C /* PacketListener.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = PacketListener.h; path = ../../../addons/ofxOsc/libs/oscpack/src/ip/PacketListener.h; sourceTree = SOURCE_ROOT; };
@@ -204,26 +198,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0E91D0A61A88AE70003A66FE /* ofxTuioWrapper */ = {
-			isa = PBXGroup;
-			children = (
-				0E91D0A71A88AE70003A66FE /* src */,
-			);
-			name = ofxTuioWrapper;
-			sourceTree = "<group>";
-		};
-		0E91D0A71A88AE70003A66FE /* src */ = {
-			isa = PBXGroup;
-			children = (
-				0E91D0A81A88AE70003A66FE /* ofxTuioClient.cpp */,
-				0E91D0A91A88AE70003A66FE /* ofxTuioClient.h */,
-				0E91D0AA1A88AE70003A66FE /* ofxTuioServer.cpp */,
-				0E91D0AB1A88AE70003A66FE /* ofxTuioServer.h */,
-			);
-			name = src;
-			path = ../../../addons/ofxTuioWrapper/src;
-			sourceTree = "<group>";
-		};
 		1F4FB5C423662B96ADFDCC0B /* ofxXmlSettings */ = {
 			isa = PBXGroup;
 			children = (
@@ -350,7 +324,6 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
-				0E91D0A61A88AE70003A66FE /* ofxTuioWrapper */,
 				E6053AB7FEC63D5F83825B88 /* ofxOsc */,
 				1F4FB5C423662B96ADFDCC0B /* ofxXmlSettings */,
 				6234D3BCE87D1C3BA2230F19 /* ofxMaxim */,
@@ -577,11 +550,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0E91D0AD1A88AE70003A66FE /* ofxTuioServer.cpp in Sources */,
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
 				72A929D3561B8232A182ABFC /* ofxOscBundle.cpp in Sources */,
-				0E91D0AC1A88AE70003A66FE /* ofxTuioClient.cpp in Sources */,
 				5864AD82E20F15536D054EA3 /* ofxOscMessage.cpp in Sources */,
 				4ADB88E2FB52E76A471065DE /* ofxOscParameterSync.cpp in Sources */,
 				640279EE111671BD026CB013 /* ofxOscReceiver.cpp in Sources */,

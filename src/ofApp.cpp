@@ -18,19 +18,6 @@ void ofApp::setup(){
     
     sender.setup(HOST, PORT);
     stage.set(0, 0, ofGetWidth(), ofGetHeight());
-    receiver.setup(12345);
-    
-    
-    //Connect to Port
-    myTuioClient.connect(3333);
-    
-    
-    //Assign Global TUIO Callback Functions
-    ofAddListener(ofEvents.touchDown,this,&ofApp::touchDown);
-    ofAddListener(ofEvents.touchUp,this,&ofApp::touchUp);
-    ofAddListener(ofEvents.touchMoved,this,&ofApp::touchMoved);
-    
-    
 
     
     ofSetFullscreen(true);  // set fullscreen
@@ -181,10 +168,6 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
     
-    
-    //render TUIO Cursors and Objects
-    myTuio.drawCursors();
-    myTuio.drawObjects();
 
     if (selectedColor.size()==0) {
         
@@ -939,85 +922,38 @@ void ofApp::audioRequested 	(float * output, int bufferSize, int nChannels){
             
              rgb = (colorPicked.b*colorPicked.r*colorPicked.g);
              sound2 = ofMap(rgb,0,(powf(255,3)),1,curveVertices.size());
-             sound3 = ofMap(rgb,0,(powf(255,3)),1,10);
+             sound3 = ofMap(rgb,0,(powf(255,3)),.1,1);
             
-//        }
+        }
         
             if (camActive ) {
              
-//                myBass=0;
-
-            myBass = mySine[i].sinewave(abs((myOtherSine[i].triangle(myLastSine[i].phasor(0.1)*f2)*f2*sound2)));//awesome bassline
-
+                myBass = mySine.sinewave(myOtherSine.square(myLastSine.sinewave(0.1)*30)*f2*sound3);//awesome bassline
 
                 
-            }
-            
-            if (camActive==false && curved == false){
-//                myBass=0;
+            } else if (camActive==false && curved == false){
+                
+                myBass = mySine.sinewave(myOtherSine.sinewave(myLastSine.sinewave(0.1)*30)*f1);//awesome bassline
 
                 
-                myBass = mySine[i].sinewave(myOtherSine[i].sinewave(myLastSine[i-1].sinewave(0.1)*sound2)*f1);//awesome bassline
+            } else if (curved && camActive==false) {
+                
+                myBass = mySine.sinewave(myOtherSine.sinewave(myLastSine.sinewave(0.1)*30)*f0);//awesome bassline
 
                 
-            }
-            
-            if (curved && camActive==false) {
-//                myBass=0;
-
+            } else if (curved && camActive){
                 
-                myBass = mySine[i].sinewave(myOtherSine[i].triangle(myLastSine[i].sinewave(0.1)*sound2)*f0);//awesome bassline
+                myBass = mySine.sinewave(myOtherSine.sinewave(myLastSine.sinewave(0.1)*30)*440);//awesome bassline
 
                 
             }
             
-            if (curved && camActive){
-//                myBass=0;
-
+            else if (!open ){
                 
-                myBass = mySine[i].sinewave(myOtherSine[i].sinewave(myLastSine[i].sinewave(0.1)*sound2)*f1);//awesome bassline
-
+                myBass = mySine.sinewave(myOtherSine.sinewave(myLastSine.sinewave(0.1)*f0-f1)*f0);//awesome bassline
+                
                 
             }
-            
-            if (!screenAuto){
-            
-            
-//                myBass=0;
-//                double f0 = 100;
-                for(int i=0; i < 10; i++) {
-                    double thisSine = myBass + sineBank[i].sinewave(f0 + (i * f1));
-                    double multiplier = 1.0 / (i+1.0);
-                    thisSine = thisSine * multiplier;
-                    myBass = myBass + thisSine;
-                }
-                myBass *= 0.1;
-//                *output = wave;//simple as that!
-                
-            }
-            
-            
-            if (!open && !camActive){
-                
-                
-//                myBass=0;
-                //                double f0 = 100;
-                for(int i=0; i < 10; i++) {
-                    double thisSine = myBass + sineBank[i].sinewave(sineBank[i].square(f1 + (i * f0))*sound3);
-                    double multiplier = 1.0 / (i+1.0);
-                    thisSine = thisSine * multiplier;
-                    myBass = myBass + thisSine;
-                }
-                myBass *= 0.1;
-                //                *output = wave;//simple as that!
-                
-            }
-
-            
-            
-            
-            
-        }
         
         
         

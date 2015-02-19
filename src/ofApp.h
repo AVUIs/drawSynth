@@ -10,8 +10,6 @@
 #include "ofxXmlSettings.h"
 #include "ofHandle.h"
 #include "ofxMaxim.h"
-#include "ofxTuioClient.h"
-//#include "ofxTuioServer.h"
 
 
 
@@ -74,11 +72,6 @@ class ofApp : public ofBaseApp{
         void polygons();
         void saveXml();
     
-    void touchDown(ofTouchEventArgs & touch);
-    void touchUp(ofTouchEventArgs & touch);
-    void touchMoved(ofTouchEventArgs & touch);
-
-    
     //////////// draggable vertices ////////
     
     vector <draggableVertex> curveVertices;
@@ -90,9 +83,7 @@ class ofApp : public ofBaseApp{
     
     
     ofxOscSender sender;
-    ofxOscReceiver receiver;
     
-    ofxTuioClient myTuioClient;
     
     ofEasyCam myCam;
     bool camActive;
@@ -115,12 +106,9 @@ class ofApp : public ofBaseApp{
     
     //////////FM//////////
     
-    maxiOsc mySine[10],myOtherSine[10],myLastSine[10],myPhasor[10];//Three oscillators
-
-    maxiOsc sineBank[10];//let's create an oscillator and give it a name.
+    maxiOsc mySine,myOtherSine,myLastSine,myPhasor;//Three oscillators
 
     double myBass;
-    maxiFlanger myFlanger;
     
     ////////////////////////////
     
