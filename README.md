@@ -14,25 +14,17 @@ step 4 - just play with it.  Combination of keybord commands can create nice eff
 
 each parameter you change will affect the sound.
 
-KEYBOARD COMMAND AND OPTIONS (all smallcaps)
+#### KEYBOARD COMMAND AND OPTIONS (all smallcaps)
 
-SPACEBAR - fills the shape with the selected color
-
-c - makes the closed shape curved
-
-k - random pattern
-
-r - random color
-
-z - toggle easycam (standard commands for easycam)
-
-a - toggle ofSetBackgroundAuto (to create trails etc...)
-
-b - delete last dot
-
-BACKSPACE - delete the whole shape
-
-f - toggle fullscreen
+*SPACEBAR - fills the shape with the selected color
+*c - makes the closed shape curved
+*k - random pattern
+*r - random color
+*z - toggle easycam (standard commands for easycam)
+*a - toggle ofSetBackgroundAuto (to create trails etc...)
+*b - delete last dot
+*BACKSPACE - delete the whole shape
+*f - toggle fullscreen
 
 INSTALLATION
 Some people had problem installing MAximilian addon.
